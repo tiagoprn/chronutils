@@ -11,6 +11,14 @@ clean:  ## Clean python bytecodes, cache...
 	@find . -name ".cache" -type d | xargs rm -rf
 	@find . -name ".coverage" -type f | xargs rm -rf
 
+requirements-dev:  ## Install the app requirements (dev mode)
+	@pip install --upgrade pip
+	@pip install -r requirements.dev
+
+requirements-prod:  ## Install the app requirements (prod mode)
+	@pip install --upgrade pip
+	@pip install -r requirements.all
+
 test: clean  ## Run test suite and coverage report
 	@py.test --cov -s -vvvv --cov-report term-missing
 
