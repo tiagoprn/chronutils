@@ -2,7 +2,7 @@ import logging
 
 import pytest
 
-from chronator.calculator import (
+from chronutils.calculator import (
     calculate_elapsed_hours,
     calculate_hours_balance,
     calculate_total_hours,
