@@ -1,11 +1,9 @@
-# prod
-
+# PROD
 click
 python-dateutil
+python-frontmatter
 
-
-# dev
-
+# DEV
 ipdb
 pytest
 pytest-cov

@@ -36,6 +36,8 @@ pytest==7.2.0
 pytest-cov==4.0.0
 pytest-sugar==0.9.6
 python-dateutil==2.8.2
+python-frontmatter==1.0.0
+PyYAML==6.0
 six==1.16.0
 stack-data==0.6.2
 termcolor==2.1.1
