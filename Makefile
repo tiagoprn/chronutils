@@ -22,5 +22,8 @@ requirements-prod:  ## Install the app requirements (prod mode)
 test: clean  ## Run test suite and coverage report
 	@py.test --cov -s -vvvv --cov-report term-missing
 
+test-matching: clean  ## Run only tests matching pattern. E.g.: make test-matching test=TestClassName
+	@py.test -k $(test) -s -vvv
+
 sample-run: clean ## runs the script on a sample input file
 	@/bin/bash sample_run.sh
