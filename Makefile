@@ -25,5 +25,11 @@ test: clean  ## Run test suite and coverage report
 test-matching: clean  ## Run only tests matching pattern. E.g.: make test-matching test=TestClassName
 	@py.test -k $(test) -s -vvv
 
-sample-run: clean ## runs the script on a sample input file
-	@/bin/bash sample_run.sh
+example-run-elapsed-hours-mode-on-sample-file: clean  ## runs "elapsed hours" mode on the sample input file
+	@cat samples/input_file_sample.txt | grep -E -o '^# [0-9]{2}\/[0-9]{2} \([0-9]{2}.+\)' | python chronutils/calculator.py --mode elapsed_hours
+
+example-run-hours-balance-mode-on-sample-file: clean  ## runs "hours_balance" mode on the sample input file
+	@cat samples/input_file_sample.txt | grep -E -o '^# [0-9]{2}\/[0-9]{2} \([0-9]{2}.+\)' | python chronutils/calculator.py --mode elapsed_hours | python chronutils/calculator.py --mode hours_balance
+
+example-run-total-hours-balance-mode-on-sample-file: clean  ## runs "total-hours" mode on the sample input file
+	@cat samples/input_file_sample.txt | grep -E -o '^# [0-9]{2}\/[0-9]{2} \([0-9]{2}.+\)' | python chronutils/calculator.py --mode elapsed_hours | python chronutils/calculator.py --mode hours_balance | python chronutils/calculator.py --mode total_hours
