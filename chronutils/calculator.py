@@ -223,7 +223,7 @@ def get_record_from_journal_file(journal_file_path: str) -> str:
         )
 
     record_date = journal_file["date"].strftime("%d/%m")
-    return f"{record_date} ({timestamps})"
+    return f"# {record_date} ({timestamps})"
 
 
 def get_records_from_journal_files_in_folder(folder_path: str) -> list[str]:
