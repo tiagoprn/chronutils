@@ -230,7 +230,15 @@ def get_records_from_journal_files_in_folder(folder_path: str) -> list[str]:
     files = Path(folder_path).glob("*")
     records = []
     for file_name in files:
-        record = get_record_from_journal_file(file_name)
+        try:
+            record = get_record_from_journal_file(file_name)
+        except TypeError as ex:
+            message = (
+                f'Exception getting records from file "{file_name}": '
+                f"{ex}. Fix that and re-run this script."
+            )
+            print(message)
+            sys.exit(1)
         records.append(record)
     return records
 

@@ -78,7 +78,13 @@ def test_get_record_from_journal_file():
 
 
 def test_get_records_from_journal_files_in_folder():
-    # TODO: this is failing, continue from here
     folder = "samples/journals"
     records = get_records_from_journal_files_in_folder(folder)
-    assert records == []  # TODO
+    expected_records = [
+        "30/11 (09:00 13:00 14:00 18:00)",
+        "01/12 (08:55 11:32 12:44 18:44)",
+        "02/12 (09:05 12:42 12:53 15:57)",
+        "05/12 (06:l5 11:26 12:23 16:15 17:22 20:54)",
+        "06/12 (06:00 07:15 08:25 11:35 12:35 17:45)",
+    ]
+    assert records == expected_records
