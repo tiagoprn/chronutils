@@ -32,6 +32,13 @@ class TimestampsParseException(Exception):
     pass
 
 
+# TODO: create a new test for this function because dateutil.parse
+#       does not seem totally reliable.
+def extract_date_from_timestamp(timestamp: str) -> datetime:
+    datetime_object = parse(timestr=timestamp, dayfirst=True)
+    return datetime_object
+
+
 def parse_timestamps(input: str) -> list[datetime]:
     timestamps = []
 
@@ -43,13 +50,19 @@ def parse_timestamps(input: str) -> list[datetime]:
 
     index_on_pair = 1
     previous_datetime_object = None
-    print(f"INPUT = {input}")
+    print(f"INPUT='{input}'")
+
+    if input in [
+        "02/12 (09:05 12:42 12:53 15:57)",
+        "05/12 (06:l5 11:26 12:23 16:15 17:22 20:54)",
+    ]:
+        # TODO: debugging why it fails with 05/12, remove after testing
+        __import__("ipdb").set_trace()
+
     for record in time_records.split():
         timestamp = f"{reference_date}{record}"
-        try:
-            datetime_object = parse(timestr=timestamp, dayfirst=True)
-        except:
-            __import__("ipdb").set_trace()
+        print(f"timestamp='{timestamp}'")
+        datetime_object = extract_date_from_timestamp(timestamp)
 
         if previous_datetime_object and (
             datetime_object < previous_datetime_object
