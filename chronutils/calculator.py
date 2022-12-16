@@ -4,7 +4,6 @@ import sys
 import time
 from datetime import datetime, timedelta
 from pathlib import Path
-from typing import List
 
 import click
 import frontmatter
@@ -25,37 +24,32 @@ logging.basicConfig(
 )
 
 
-def parse_timestamps(input: str) -> List[datetime]:
+class JournalFileKeysException(Exception):
+    pass
+
+
+class TimestampsParseException(Exception):
+    pass
+
+
+def parse_timestamps(input: str) -> list[datetime]:
     timestamps = []
 
-    try:
-        reference_date, time_records = input.split("(")
-    except ValueError:
-        raise Exception(
-            f"\n\nExpected 2 or 4 records (1 or 2 interval pairs).\n"
-            f"E.g.: \n"
-            f"# 14/01 (09:00 12:50 13:55 18:30)\n"
-            f"# 14/01 (09:00 18:30)\n"
-        )
+    reference_date, time_records = input.split("(")
 
     time_records = time_records.replace(")", "")
 
     pairs = int(len(time_records.split()) / 2)
 
-    if pairs not in [1, 2]:
-        message = (
-            f"Invalid time record. It must contain "
-            f"1 or 2 pairs, with start and "
-            f"finish times on each one. "
-            f'input="{input}", pairs={pairs}'
-        )
-        raise Exception(message)
-
     index_on_pair = 1
     previous_datetime_object = None
+    print(f"INPUT = {input}")
     for record in time_records.split():
         timestamp = f"{reference_date}{record}"
-        datetime_object = parse(timestr=timestamp, dayfirst=True)
+        try:
+            datetime_object = parse(timestr=timestamp, dayfirst=True)
+        except:
+            __import__("ipdb").set_trace()
 
         if previous_datetime_object and (
             datetime_object < previous_datetime_object
@@ -80,24 +74,32 @@ def calculate_elapsed_hours(input: str) -> str:
     """
     Given time intervals on a day,
     calculates the total number of hours elapsed
-    summing the 2 pairs elapsed times.
+    summing the pairs elapsed times.
     """
     timestamps = parse_timestamps(input)
     delta_str = ""
-    total_records = len(timestamps)
+    total_elements = len(timestamps)
 
-    if total_records not in [2, 4]:
-        raise Exception(
-            f"Parsed timestamps amount not supported: {total_records}. "
-            f"You must have 2 or 4 timestamps total (1 or 2 pairs "
-            f"of time intervals)."
+    is_odd = total_elements % 2 != 0
+
+    if is_odd:
+        raise TimestampsParseException(
+            f"Parsed timestamps amount not supported: {total_elements}. "
+            f"You must have pairs of time intervals - "
+            f"but you have {total_elements} elements)."
         )
 
-    delta = timestamps[1] - timestamps[0]
-    if total_records == 4:
-        delta += timestamps[3] - timestamps[2]
+    pairs = total_elements / 2
 
-    delta_str = convert_seconds_to_hours_minutes(delta.seconds)
+    pair_number = 0
+    while timestamps:
+        initial_time = timestamps.pop(0)
+        end_time = timestamps.pop(0)
+        delta = end_time - initial_time
+        pair_number += 1
+        total_delta = delta if pair_number == 1 else total_delta + delta
+
+    delta_str = convert_seconds_to_hours_minutes(total_delta.seconds)
 
     return delta_str
 
@@ -206,20 +208,20 @@ def get_record_from_journal_file(journal_file_path: str) -> str:
 
     expected_keys = {"date", "hours"}
     if not (set(keys) == expected_keys):
-        raise Exception(
+        raise JournalFileKeysException(
             f"Expected keys: '{expected_keys}', "
             f"but found these instead: '{set(keys)}'"
         )
 
     total_timestamps = len(journal_file["hours"])
-    timestamps_are_paired = total_timestamps % 2 == 0
+    total_timestamps_is_even = total_timestamps % 2 == 0
 
     timestamps = " ".join(journal_file["hours"])
-    if not timestamps_are_paired:
-        raise Exception(
+    if not total_timestamps_is_even:
+        raise TimestampsParseException(
             f"Timestamps are odd - there is a total of {total_timestamps} "
             f"timestamps. There should be {total_timestamps-1} or "
-            f"{total_timestamps+1} (timestamps: {timestamps})"
+            f"{total_timestamps+1} (timestamps computed: {timestamps})"
         )
 
     record_date = journal_file["date"].strftime("%d/%m")
@@ -241,6 +243,17 @@ def get_records_from_journal_files_in_folder(folder_path: str) -> list[str]:
             sys.exit(1)
         records.append(record)
     return records
+
+
+def get_elapsed_hours_for_records_on_journal_files_folder(
+    folder: str,
+) -> list[str]:
+    records = get_records_from_journal_files_in_folder(folder)
+    elapsed_hours = []
+    for record in records:
+        elapsed_record = output_calculated_elapsed_hours_for_record(record)
+        elapsed_hours.append(elapsed_record)
+    return elapsed_hours
 
 
 MODES = ["elapsed_hours", "hours_balance", "total_hours"]

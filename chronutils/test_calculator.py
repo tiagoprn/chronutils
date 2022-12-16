@@ -6,9 +6,9 @@ from chronutils.calculator import (
     calculate_elapsed_hours,
     calculate_hours_balance,
     calculate_total_hours,
+    get_elapsed_hours_for_records_on_journal_files_folder,
     get_record_from_journal_file,
     get_records_from_journal_files_in_folder,
-    output_calculated_total_hours_for_record,
     parse_timestamps,
 )
 
@@ -25,6 +25,7 @@ def test_parse_timestamps(records):
 
 
 def test_calculate_elapsed_hours(records):
+    # TODO: this must pass with 3, 4 or more time pairs
     for index, scenario in enumerate(records):
         input = scenario["input"]
         logger.info(f"Running scenario {index+1}/{len(records)}::{input}")
@@ -75,7 +76,7 @@ def test_calculate_total_hours(index, records, expected):
 def test_get_record_from_journal_file():
     input_file = "samples/journals/journal-file-example.md"
     record = get_record_from_journal_file(input_file)
-    assert record == "30/11 (09:00 13:00 14:00 18:00)"
+    assert record == "# 30/11 (09:00 13:00 14:00 18:00)"
 
 
 def test_get_records_from_journal_files_in_folder():
@@ -91,7 +92,9 @@ def test_get_records_from_journal_files_in_folder():
     assert records == expected_records
 
 
-def test_output_calculated_hours_for_record_on_journal_files_in_folder():
+def test_output_elapsed_hours_for_record_on_journal_files_in_folder():
     folder = "samples/journals"
-    records = get_records_from_journal_files_in_folder(folder)
-    output_calculated_total_hours_for_record(records)
+    elapsed_hours = get_elapsed_hours_for_records_on_journal_files_folder(
+        folder
+    )
+    # TODO: fix the bug on the execution and put the assert here

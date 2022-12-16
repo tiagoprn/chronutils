@@ -10,82 +10,108 @@ def records():
 
     return [
         {
-            'input': '31/12 (23:15 0:00)',
-            'expected_parsed_timestamps_output': [
+            "input": "31/12 (23:15 0:00)",
+            "expected_parsed_timestamps_output": [
                 datetime(current_year, 12, 31, 23, 15),
                 datetime(next_year, 1, 1, 0, 0),
             ],
-            'expected_calculate_elapsed_hours_output': '00:45',
+            "expected_calculate_elapsed_hours_output": "00:45",
         },
         {
-            'input': '31/12 (23:15 0:15)',
-            'expected_parsed_timestamps_output': [
+            "input": "31/12 (23:15 0:15)",
+            "expected_parsed_timestamps_output": [
                 datetime(current_year, 12, 31, 23, 15),
                 datetime(next_year, 1, 1, 0, 15),
             ],
-            'expected_calculate_elapsed_hours_output': '01:00',
+            "expected_calculate_elapsed_hours_output": "01:00",
         },
         {
-            'input': '31/12 (23:15 23:14)',
-            'expected_parsed_timestamps_output': [
+            "input": "31/12 (23:15 23:14)",
+            "expected_parsed_timestamps_output": [
                 datetime(current_year, 12, 31, 23, 15),
                 datetime(next_year, 1, 1, 23, 14),
             ],
-            'expected_calculate_elapsed_hours_output': '23:59',
+            "expected_calculate_elapsed_hours_output": "23:59",
         },
         {
-            'input': '31/12 (23:15 23:15)',
-            'expected_parsed_timestamps_output': [
+            "input": "31/12 (23:15 23:15)",
+            "expected_parsed_timestamps_output": [
                 datetime(current_year, 12, 31, 23, 15),
                 datetime(current_year, 12, 31, 23, 15),
             ],
-            'expected_calculate_elapsed_hours_output': '00:00',
+            "expected_calculate_elapsed_hours_output": "00:00",
         },
         {
-            'input': '31/12 (23:15 23:16)',
-            'expected_parsed_timestamps_output': [
+            "input": "31/12 (23:15 23:16)",
+            "expected_parsed_timestamps_output": [
                 datetime(current_year, 12, 31, 23, 15),
                 datetime(current_year, 12, 31, 23, 16),
             ],
-            'expected_calculate_elapsed_hours_output': '00:01',
+            "expected_calculate_elapsed_hours_output": "00:01",
         },
         {
-            'input': '31/12/1999 (23:15 23:14)',
-            'expected_parsed_timestamps_output': [
+            "input": "31/12/1999 (23:15 23:14)",
+            "expected_parsed_timestamps_output": [
                 datetime(1999, 12, 31, 23, 15),
                 datetime(2000, 1, 1, 23, 14),
             ],
-            'expected_calculate_elapsed_hours_output': '23:59',
+            "expected_calculate_elapsed_hours_output": "23:59",
         },
         {
-            'input': '30/01 (06:50 11:43 12:20 18:32)',
-            'expected_parsed_timestamps_output': [
+            "input": "30/01 (06:50 11:43 12:20 18:32)",
+            "expected_parsed_timestamps_output": [
                 datetime(current_year, 1, 30, 6, 50),
                 datetime(current_year, 1, 30, 11, 43),
                 datetime(current_year, 1, 30, 12, 20),
                 datetime(current_year, 1, 30, 18, 32),
             ],
-            'expected_calculate_elapsed_hours_output': '11:05',
+            "expected_calculate_elapsed_hours_output": "11:05",
         },
         {
-            'input': '30/01 (23:50 01:43 01:44 03:15)',
-            'expected_parsed_timestamps_output': [
+            "input": "30/01 (23:50 01:43 01:44 03:15)",
+            "expected_parsed_timestamps_output": [
                 datetime(current_year, 1, 30, 23, 50),
                 datetime(current_year, 1, 31, 1, 43),
                 datetime(current_year, 1, 31, 1, 44),
                 datetime(current_year, 1, 31, 3, 15),
             ],
-            'expected_calculate_elapsed_hours_output': '03:24',
+            "expected_calculate_elapsed_hours_output": "03:24",
         },
         {
-            'input': f'30/01/{current_year} (06:50 11:43 12:20 18:32)',
-            'expected_parsed_timestamps_output': [
+            "input": f"30/01/{current_year} (06:50 11:43 12:20 18:32)",
+            "expected_parsed_timestamps_output": [
                 datetime(current_year, 1, 30, 6, 50),
                 datetime(current_year, 1, 30, 11, 43),
                 datetime(current_year, 1, 30, 12, 20),
                 datetime(current_year, 1, 30, 18, 32),
             ],
-            'expected_calculate_elapsed_hours_output': '11:05',
+            "expected_calculate_elapsed_hours_output": "11:05",
+        },
+        {
+            "input": f"30/01/{current_year} (06:50 11:43 12:20 15:00 15:45 18:32)",
+            "expected_parsed_timestamps_output": [
+                datetime(current_year, 1, 30, 6, 50),
+                datetime(current_year, 1, 30, 11, 43),
+                datetime(current_year, 1, 30, 12, 20),
+                datetime(current_year, 1, 30, 15, 0),
+                datetime(current_year, 1, 30, 15, 45),
+                datetime(current_year, 1, 30, 18, 32),
+            ],
+            "expected_calculate_elapsed_hours_output": "10:20",
+        },
+        {
+            "input": f"13/11/{current_year} (06:50 11:43 12:20 15:00 15:45 18:32 20:05 22:00)",
+            "expected_parsed_timestamps_output": [
+                datetime(current_year, 11, 13, 6, 50),
+                datetime(current_year, 11, 13, 11, 43),
+                datetime(current_year, 11, 13, 12, 20),
+                datetime(current_year, 11, 13, 15, 0),
+                datetime(current_year, 11, 13, 15, 45),
+                datetime(current_year, 11, 13, 18, 32),
+                datetime(current_year, 11, 13, 20, 5),
+                datetime(current_year, 11, 13, 22, 0),
+            ],
+            "expected_calculate_elapsed_hours_output": "12:15",
         },
     ]
 
@@ -93,11 +119,11 @@ def records():
 @pytest.fixture
 def balance_records():
     return [
-        {'input': '31/12 - 08:00', 'expected_hours_balance_output': '00:00'},
-        {'input': '31/12 - 07:15', 'expected_hours_balance_output': '-00:45'},
-        {'input': '31/12 - 23:15', 'expected_hours_balance_output': '15:15'},
-        {'input': '31/12 - 04:00', 'expected_hours_balance_output': '-04:00'},
-        {'input': '31/12 - 07:01', 'expected_hours_balance_output': '-00:59'},
-        {'input': '31/12 - 07:59', 'expected_hours_balance_output': '-00:01'},
-        {'input': '31/12 - 08:01', 'expected_hours_balance_output': '00:01'},
+        {"input": "31/12 - 08:00", "expected_hours_balance_output": "00:00"},
+        {"input": "31/12 - 07:15", "expected_hours_balance_output": "-00:45"},
+        {"input": "31/12 - 23:15", "expected_hours_balance_output": "15:15"},
+        {"input": "31/12 - 04:00", "expected_hours_balance_output": "-04:00"},
+        {"input": "31/12 - 07:01", "expected_hours_balance_output": "-00:59"},
+        {"input": "31/12 - 07:59", "expected_hours_balance_output": "-00:01"},
+        {"input": "31/12 - 08:01", "expected_hours_balance_output": "00:01"},
     ]
